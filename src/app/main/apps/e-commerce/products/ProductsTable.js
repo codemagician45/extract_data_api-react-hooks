@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {Icon, Table, TableBody, TableCell, TablePagination, TableRow, Checkbox} from '@material-ui/core';
-import {FuseScrollbars} from '@fuse';
-import {withRouter} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Icon, Table, TableBody, TableCell, TablePagination, TableRow, Checkbox } from '@material-ui/core';
+import { FuseScrollbars } from '@fuse';
+import { withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 import _ from '@lodash';
 import ProductsTableHead from './ProductsTableHead';
 import * as Actions from '../store/actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {makeStyles} from '@material-ui/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/styles';
 
-function ProductsTable(props)
-{
+function ProductsTable(props) {
     const dispatch = useDispatch();
-    const products = useSelector(({eCommerceApp}) => eCommerceApp.products.data);
-    const searchText = useSelector(({eCommerceApp}) => eCommerceApp.products.searchText);
-    
+    const products = useSelector(({ eCommerceApp }) => eCommerceApp.products.data);
+    const products = useSelector(({ eCommerceApp }) => eCommerceApp.products.data);
+    // const searchText1 = useSelector(({eCommerceApp}) => eCommerceApp.products.searchText);
+
     const [selected, setSelected] = useState([]);
     const [data, setData] = useState(products);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [order, setOrder] = useState({
         direction: 'asc',
-        id       : null
+        id: null
     });
 
     useEffect(() => {
@@ -32,21 +32,19 @@ function ProductsTable(props)
         setData(searchText.length === 0 ? products : _.filter(products, item => item.title.toLowerCase().includes(searchText.toLowerCase())))
     }, [products, searchText]);
 
-    
+
     const useStyles = makeStyles(theme => ({
         tbcontent: {
-            textAlign:'center'
+            textAlign: 'center'
         }
     }));
     const classes = useStyles();
 
-    function handleRequestSort(event, property)
-    {
+    function handleRequestSort(event, property) {
         const id = property;
         let direction = 'desc';
 
-        if ( order.id === property && order.direction === 'desc' )
-        {
+        if (order.id === property && order.direction === 'desc') {
             direction = 'asc';
         }
 
@@ -56,40 +54,32 @@ function ProductsTable(props)
         });
     }
 
-    function handleSelectAllClick(event)
-    {
-        if ( event.target.checked )
-        {
+    function handleSelectAllClick(event) {
+        if (event.target.checked) {
             setSelected(data.map(n => n.id));
             return;
         }
         setSelected([]);
     }
 
-    function handleClick(item)
-    {
+    function handleClick(item) {
         props.history.push('/apps/e-commerce/products/' + item.id + '/' + item.handle);
     }
 
-    function handleCheck(event, id)
-    {
+    function handleCheck(event, id) {
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
-        if ( selectedIndex === -1 )
-        {
+        if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, id);
         }
-        else if ( selectedIndex === 0 )
-        {
+        else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         }
-        else if ( selectedIndex === selected.length - 1 )
-        {
+        else if (selectedIndex === selected.length - 1) {
             newSelected = newSelected.concat(selected.slice(0, -1));
         }
-        else if ( selectedIndex > 0 )
-        {
+        else if (selectedIndex > 0) {
             newSelected = newSelected.concat(
                 selected.slice(0, selectedIndex),
                 selected.slice(selectedIndex + 1)
@@ -99,13 +89,11 @@ function ProductsTable(props)
         setSelected(newSelected);
     }
 
-    function handleChangePage(event, page)
-    {
+    function handleChangePage(event, page) {
         setPage(page);
     }
 
-    function handleChangeRowsPerPage(event)
-    {
+    function handleChangeRowsPerPage(event) {
         setRowsPerPage(event.target.value);
     }
 
@@ -205,16 +193,15 @@ function ProductsTable(props)
                     <TableBody>
                         {_.orderBy(data, [
                             (o) => {
-                                switch ( order.id )
-                                {
+                                switch (order.id) {
                                     case 'categories':
-                                    {
-                                        return o.categories[0];
-                                    }
+                                        {
+                                            return o.categories[0];
+                                        }
                                     default:
-                                    {
-                                        return o[order.id];
-                                    }
+                                        {
+                                            return o[order.id];
+                                        }
                                 }
                             }
                         ], [order.direction])
@@ -232,7 +219,7 @@ function ProductsTable(props)
                                         selected={isSelected}
                                         onClick={event => handleClick(n)}
                                     >
-                                         {/* <TableCell className="w-48 px-4 sm:px-12" padding="checkbox">
+                                        {/* <TableCell className="w-48 px-4 sm:px-12" padding="checkbox">
                                             
                                         </TableCell> */}
 
