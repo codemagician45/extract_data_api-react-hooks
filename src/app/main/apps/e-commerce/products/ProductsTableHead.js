@@ -5,45 +5,52 @@ import {makeStyles} from '@material-ui/styles';
 
 const rows = [
     {
-        id            : 'image',
-        align         : 'left',
-        disablePadding: true,
-        label         : '',
-        sort          : false
-    },
-    {
-        id            : 'name',
-        align         : 'left',
+        id            : 'id',
+        align         : 'center',
         disablePadding: false,
-        label         : 'Name',
+        label         : 'ID',
         sort          : true
     },
     {
-        id            : 'categories',
-        align         : 'left',
+        id            : 'sku',
+        align         : 'center',
         disablePadding: false,
-        label         : 'Category',
+        label         : 'Sku',
         sort          : true
     },
     {
-        id            : 'priceTaxIncl',
-        align         : 'right',
+        id            : 'title',
+        align         : 'center',
+        disablePadding: false,
+        label         : 'Title',
+        sort          : true
+    },
+    {
+        id            : 'price',
+        align         : 'center',
         disablePadding: false,
         label         : 'Price',
         sort          : true
     },
     {
-        id            : 'quantity',
-        align         : 'right',
+        id            : 'tax_rate',
+        align         : 'center',
         disablePadding: false,
-        label         : 'Quantity',
+        label         : 'Tax Rate',
         sort          : true
     },
     {
-        id            : 'active',
-        align         : 'right',
+        id            : 'description',
+        align         : 'center',
         disablePadding: false,
-        label         : 'Active',
+        label         : 'Description',
+        sort          : true
+    },
+    {
+        id            : 'weight',
+        align         : 'center',
+        disablePadding: false,
+        label         : 'Weight',
         sort          : true
     }
 ];
@@ -76,7 +83,7 @@ function ProductsTableHead(props)
     return (
         <TableHead>
             <TableRow className="h-64">
-                <TableCell padding="checkbox" className="relative pl-4 sm:pl-12">
+                {/* <TableCell padding="checkbox" className="relative pl-4 sm:pl-12">
                     <Checkbox
                         indeterminate={props.numSelected > 0 && props.numSelected < props.rowCount}
                         checked={props.numSelected === props.rowCount}
@@ -112,7 +119,7 @@ function ProductsTableHead(props)
                             </Menu>
                         </div>
                     )}
-                </TableCell>
+                </TableCell> */}
                 {rows.map(row => {
                     return (
                         <TableCell

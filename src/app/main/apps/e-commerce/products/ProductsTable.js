@@ -7,13 +7,14 @@ import _ from '@lodash';
 import ProductsTableHead from './ProductsTableHead';
 import * as Actions from '../store/actions';
 import {useDispatch, useSelector} from 'react-redux';
+import {makeStyles} from '@material-ui/styles';
 
 function ProductsTable(props)
 {
     const dispatch = useDispatch();
     const products = useSelector(({eCommerceApp}) => eCommerceApp.products.data);
     const searchText = useSelector(({eCommerceApp}) => eCommerceApp.products.searchText);
-
+    
     const [selected, setSelected] = useState([]);
     const [data, setData] = useState(products);
     const [page, setPage] = useState(0);
@@ -28,8 +29,16 @@ function ProductsTable(props)
     }, [dispatch]);
 
     useEffect(() => {
-        setData(searchText.length === 0 ? products : _.filter(products, item => item.name.toLowerCase().includes(searchText.toLowerCase())))
+        setData(searchText.length === 0 ? products : _.filter(products, item => item.title.toLowerCase().includes(searchText.toLowerCase())))
     }, [products, searchText]);
+
+    
+    const useStyles = makeStyles(theme => ({
+        tbcontent: {
+            textAlign:'center'
+        }
+    }));
+    const classes = useStyles();
 
     function handleRequestSort(event, property)
     {
@@ -115,7 +124,7 @@ function ProductsTable(props)
                         rowCount={data.length}
                     />
 
-                    <TableBody>
+                    {/* <TableBody>
                         {_.orderBy(data, [
                             (o) => {
                                 switch ( order.id )
@@ -188,6 +197,72 @@ function ProductsTable(props)
                                                     <Icon className="text-red text-20">remove_circle</Icon>
                                                 )
                                             }
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody> */}
+                    <TableBody>
+                        {_.orderBy(data, [
+                            (o) => {
+                                switch ( order.id )
+                                {
+                                    case 'categories':
+                                    {
+                                        return o.categories[0];
+                                    }
+                                    default:
+                                    {
+                                        return o[order.id];
+                                    }
+                                }
+                            }
+                        ], [order.direction])
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map(n => {
+                                const isSelected = selected.indexOf(n.id) !== -1;
+                                return (
+                                    <TableRow
+                                        className="h-64 cursor-pointer"
+                                        hover
+                                        role="checkbox"
+                                        aria-checked={isSelected}
+                                        tabIndex={-1}
+                                        key={n.id}
+                                        selected={isSelected}
+                                        onClick={event => handleClick(n)}
+                                    >
+                                         {/* <TableCell className="w-48 px-4 sm:px-12" padding="checkbox">
+                                            
+                                        </TableCell> */}
+
+                                        <TableCell component="th" scope="row" className={classes.tbcontent} align="center" >
+                                            {n.id}
+                                        </TableCell>
+
+                                        <TableCell component="th" scope="row" align="center" >
+                                            {n.sku}
+                                        </TableCell>
+
+                                        <TableCell component="th" scope="row" align="center">
+                                            {n.title}
+                                        </TableCell>
+
+                                        <TableCell component="th" scope="row" align="center" >
+                                            {n.price}
+                                        </TableCell>
+
+                                        <TableCell component="th" scope="row" align="center">
+                                            {n.tax_rate}
+                                        </TableCell>
+
+                                        <TableCell component="th" scope="row">
+                                            <div dangerouslySetInnerHTML={{ __html: n.description }} />;
+                                            {/* {n.description} */}
+                                        </TableCell>
+
+                                        <TableCell component="th" scope="row" align="center">
+                                            {n.weight}
                                         </TableCell>
                                     </TableRow>
                                 );
